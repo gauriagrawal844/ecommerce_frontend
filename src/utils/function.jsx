@@ -1,7 +1,6 @@
 import { ERROR_MSG } from '../constants/constants';
 
 export const getSuccessMessage = (res) => {
-  console.log(res.data.message);
   return res?.data?.message;
 };
 
