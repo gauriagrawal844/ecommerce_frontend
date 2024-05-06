@@ -1,16 +1,22 @@
 import React from 'react';
+import Loader from './Loader';
 
 const GradiantButton = (props) => {
-  const { color, label } = props;
+  const { color, label,onClick,color2,loading,type } = props;
 
   return (
-    <button 
-      {...props}
-      type="button"
-      className={`text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`}
-    >
-      {label}
-    </button>
+    <button
+    type={type}
+    onClick={onClick}
+    style={{
+      background: `linear-gradient(to right, ${color} 0%, ${
+        color2 || color
+      } 100%)`,
+    }}
+    className={`text-white bg-gradient-to-r  hover:bg-gradient-to-br focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`}
+  >
+    {loading ? <Loader showFullScreen={false} /> : label}
+  </button>
   );
 };
 

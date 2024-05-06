@@ -17,3 +17,9 @@ export const deleteProduct = async (query = '') => {
     const response = await http.delete(`${productRoute}/delete${query}`);
     return response;
   };
+  export const updateProduct = async (data, query = '') => {
+    const response = await http.put(`${productRoute}/update${query}`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response;
+  };

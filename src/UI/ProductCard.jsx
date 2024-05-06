@@ -17,7 +17,8 @@ const ProductCard = ({
   const [loading, setLoading] = useState(false);
   const handleDeleteProduct = async () => {
     try {
-      setLoading(true);
+      const isDelete = window.confirm('Are you sure you want to delete it?');
+      setLoading(isDelete);
       const res = await deleteProduct(`?_id=${_id}`);
       const newProducts = products.filter((item) => item._id !== _id);
       setProducts(newProducts);
@@ -59,6 +60,8 @@ const ProductCard = ({
       <div className="flex gap-4">
         <GradiantButton
           label={'Edit'}
+          color="purple"
+          color2="red"
           onClick={() => {
             setSelectedProduct(product);
             setIsEdit(true);
@@ -66,7 +69,8 @@ const ProductCard = ({
         />
         <GradiantButton 
           label={'Delete'}
-          color="red"
+          color="black"
+          color2="red"
           onClick={handleDeleteProduct}
         />
       </div>

@@ -1,8 +1,10 @@
 import React from 'react';
 
-const Loader = () => {
+const Loader = ({ showFullScreen = true }) => {
   return (
-    <div className='h-screen w-full flex items-center justify-center'>
+    <div className={`${
+      showFullScreen && 'h-screen w-full'
+    } flex items-center justify-center`}>
       <svg
         aria-hidden="true"
         className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
