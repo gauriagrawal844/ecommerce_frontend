@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect,useState} from 'react';
 import Button from '../../UI/Button';
 import InputField from '../../UI/InputField';
-import {createProduct} from '../../services/productApi';
+import {createProduct,updateProduct} from '../../services/productApi';
 import { getErrorMessage, getSuccessMessage } from '../../utils/function';
 import { toast } from 'sonner';
 import Loader from '../../UI/Loader';
@@ -9,15 +9,24 @@ import Loader from '../../UI/Loader';
 export default function CreateProduct({
   products,
   setProducts,
-  selectedproduct,
+  selectedProduct,
   isEdit,}){
 
-    const [name,setName]=useState(isEdit ? selectedproduct.name : '');
-    const [price,setPrice]=useState(isEdit ? selectedproduct.price : '');
-    const [description,setDescription]=useState(isEdit ? selectedproduct.description : '');
-    const [category,setCategory]=useState(isEdit ? selectedproduct.thumbnail : '');
-    const [image,setImage]=useState(isEdit ? selectedproduct.name : '');
-    const [loading,setLoading]=useState(false);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (isEdit) {
+      setName(selectedProduct.name);
+      setPrice(selectedProduct.price);
+      setDescription(selectedProduct.description);
+      setCategory(selectedProduct.category);
+      setImage(selectedProduct.image);
+    }
+  }, [isEdit, selectedProduct]);
     const handleSubmit=async(event)=>{
         event.preventDefault();
         try {
@@ -31,13 +40,26 @@ export default function CreateProduct({
             formData.append('description', description);
             formData.append('category', category);
             formData.append('image', image);
-            const res = await createProduct(formData);
+            const res = isEdit
+            ? await updateProduct(formData)
+            : await createProduct(formData);
             setName('');
             setPrice('')
             setCategory('');
             setDescription('');
             setImage('');
-            setProducts([...products,res.data.data]);
+            if (isEdit) {
+              setProducts(
+                products.map((item) => {
+                  if (item._id === selectedProduct._id) {
+                    return res.data.data;
+                  }
+                  return item;
+                })
+              );
+            } else {
+              setProducts([...products, res.data.data]);
+            }
             toast.success(getSuccessMessage(res));
         } catch (error) {
             toast.error(getErrorMessage(error));
